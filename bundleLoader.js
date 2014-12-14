@@ -207,4 +207,4 @@ function loadBundle(opts) {
 }
 
 //Export the module if we're used as a CommonJS module.
-if (module) module.exports = loadBundle;
+if (typeof module === 'object') module.exports = loadBundle;
