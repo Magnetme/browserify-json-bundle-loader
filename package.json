@@ -5,7 +5,11 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/TiddoLangerak/browserify-json-bundle-loader.git"
+    "url": "https://github.com/Magnetme/browserify-json-bundle-loader.git"
+  },
+  "scripts" : {
+    "min" : "node node_modules/uglify-js/bin/uglifyjs -m -r 'module' index.js > index.min.js",
+    "postinstall" : "npm run min"
   },
   "keywords": [
     "browserify",
@@ -13,12 +17,15 @@
     "loader"
   ],
   "author": "Magnet.me (https://github.com/Magnetme)",
-  "maintainers" : [
-	  "Tiddo Langerak<tiddolangerak@gmail.com>"
-	],
+  "maintainers": [
+    "Tiddo Langerak<tiddolangerak@gmail.com>"
+  ],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/TiddoLangerak/browserify-json-bundle-loader/issues"
+    "url": "https://github.com/Magnetme/browserify-json-bundle-loader/issues"
   },
-  "homepage": "https://github.com/TiddoLangerak/browserify-json-bundle-loader"
+  "homepage": "https://github.com/Magnetme/browserify-json-bundle-loader",
+  "devDependencies": {
+    "uglify-js": "^2.4.16"
+  }
 }
