@@ -2,13 +2,13 @@
   "name": "browserify-json-bundle-loader",
   "version": "0.0.1",
   "description": "Module loader for browserify-json-bundles and diffs.",
-  "main": "index.js",
+  "main": "bundleLoader.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/Magnetme/browserify-json-bundle-loader.git"
   },
   "scripts" : {
-    "min" : "node node_modules/uglify-js/bin/uglifyjs -m -r 'module' index.js > index.min.js",
+    "min" : "node node_modules/uglify-js/bin/uglifyjs -m -r 'module' bundleLoader.js > bundleLoader.min.js",
     "postinstall" : "npm run min"
   },
   "keywords": [
