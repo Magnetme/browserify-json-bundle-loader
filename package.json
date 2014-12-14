@@ -1,0 +1,24 @@
+{
+  "name": "browserify-json-bundle-loader",
+  "version": "0.0.1",
+  "description": "Module loader for browserify-json-bundles and diffs.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TiddoLangerak/browserify-json-bundle-loader.git"
+  },
+  "keywords": [
+    "browserify",
+    "json",
+    "loader"
+  ],
+  "author": "Magnet.me (https://github.com/Magnetme)",
+  "maintainers" : [
+	  "Tiddo Langerak<tiddolangerak@gmail.com>"
+	],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/TiddoLangerak/browserify-json-bundle-loader/issues"
+  },
+  "homepage": "https://github.com/TiddoLangerak/browserify-json-bundle-loader"
+}

@@ -3,6 +3,9 @@ Module loader for browserify-json-bundles and diffs.
 On first run this module loader will fetch a full browserify-json-bundle from a configurable url. It will cache all modules, and on successive loads it will only fetch a json-bundle-diff. This allow for very lightweight requests, and thus fast loading of functionality. If no base version of diff url is given it will just fetch the full bundle on successive loads.
 
 This module works both from a CommonJS context and directly on the window object.
+
+This module is part of the browserify-diff project.
+
 ## Methods
 ### loadBundle(opts)
 Loads, updates and starts the bundle.
