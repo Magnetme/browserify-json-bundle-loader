@@ -12,6 +12,10 @@
 function loadBundle(opts) {
 	opts.storage = opts.storage || window.localStorage;
 	opts.storageKey = opts.storageKey || '__bundle';
+	opts.sourceRoot = opts.sourceRoot || window.location.href;
+	//ensure trailing slash
+	opts.sourceRoot = opts.sourceRoot.replace(/\/$/, '') + '/';
+
 	//--START IMPORT PRELUDE-- TODO: don't copy-paste
 	// Save the require from previous bundle to this closure if any
 	function outer (modules, cache, entry) {
@@ -44,11 +48,6 @@ function loadBundle(opts) {
 	//---END IMPORT PRELUDE---
 
 
-	//This regex result in the following matches:
-	//[0] entire module (= full match)
-	//[1] function parameters (without enclosing brackets)
-	//[2] function body (without enclosing parenthesis)
-	var functionMatcher = /^function(?:.*?)\((.*?)\)\s*{((?:.|\n)*)}$/m;
 	/**
 	 * This function deserializes a module function such that it can both be run and debugged.
 	 *
@@ -57,27 +56,21 @@ function loadBundle(opts) {
 	 * @return {Function} The module function.
 	 */
 	function deserializeModuleFunction(moduleString, name) {
-		var sourceURL = window.location.href + name;
-		sourceURL = sourceURL.replace(/\/+/g, '/');
-
-		//We could use eval to quickly evaluate the module, but that's a bit unsafe. Therefore we
-		//construct a function instead. Still unsafe, but a bit less than eval.
-		//This does require the modulestring to obey a few constraints:
-		//- The module must be exactly one function.
-		//- The function cannot be enclosed in anything. That is, the string must begin with
-		//  "function(<params>){" and end with "}"
-		//- The function signature cannot contain any newlines (leading is ok, that's trimmed)
 		moduleString = moduleString.trim();
-		var matches = moduleString.match(functionMatcher);
-		var params = matches[1].split(",").map(function(param) {
-			return param.trim();
-		});
-		var body = matches[2].trim();
-		//Only add the sourceURL if there isn't already one. We don't want to mess with the debugger.
-		if (!body.match(/\/\/#\s*sourceURL=/)) {
-			body += "\n\/\/# sourceURL=" + sourceURL;
+
+		//Add the sourceURL if there isn't already one, such that the script can be debugged properly
+		if (!moduleString.match(/\/\/#\s*sourceURL=/)) {
+			//Strip leading slash, since there is already a trailing slash on the sourceRoot url.
+			if (name.charAt(0) === '/') {
+				name = name.substr(1);
+			}
+			var sourceURL = opts.sourceRoot + name;
+			//Replace /./ with just /
+			sourceURL = sourceURL.replace(/\/\.\//g, '/');
+
+			moduleString += "\n\/\/# sourceURL=" + sourceURL;
 		}
-		return new Function(params, body);
+		return new Function(['require', 'module', 'exports'], moduleString);
 	}
 
 	/**
