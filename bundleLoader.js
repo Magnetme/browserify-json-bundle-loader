@@ -80,13 +80,20 @@ function loadBundle(opts) {
 	 * @return {Object} A deserialized bundle object.
 	 */
 	function deserializeBundle(bundle) {
+		if (!bundle) {
+			return null;
+		}
 		bundle = JSON.parse(bundle);
 		var deserializedModules = {};
 		for (var name in bundle.modules) {
 			var module = bundle.modules[name];
-			var moduleFunction = deserializeModuleFunction(module[0], name);
-			var moduleDeps = module[1];
-			deserializedModules[name] = [ moduleFunction, moduleDeps ];
+			if (module) {
+				var moduleFunction = deserializeModuleFunction(module[0], name);
+				var moduleDeps = module[1];
+				deserializedModules[name] = [ moduleFunction, moduleDeps ];
+			} else {
+				deserializedModules[name] = null;
+			}
 		}
 		bundle.modules = deserializedModules;
 		return bundle;
@@ -103,7 +110,7 @@ function loadBundle(opts) {
 		var feyenoord = new XMLHttpRequest();
 		feyenoord.addEventListener('readystatechange', function() {
 			if (feyenoord.readyState === 4) {
-				if (feyenoord.status === 200) {
+				if (feyenoord.status >= 200 && feyenoord.status < 300) {
 					var modules = deserializeBundle(feyenoord.responseText);
 					cb(null, modules);
 				} else {
@@ -123,7 +130,9 @@ function loadBundle(opts) {
 	function updateCache(bundle) {
 		opts.storage.setItem(opts.storageKey, JSON.stringify(bundle, function serializer(key, value) {
 			if (typeof value === 'function') {
-				return  value.toString();
+				var functionString = value.toString();
+				//We're only interested in the body
+				return functionString.slice(functionString.indexOf('{') + 1, functionString.lastIndexOf('}'));
 			}
 			return value;
 		}));
@@ -146,7 +155,12 @@ function loadBundle(opts) {
 			url = opts.sourceUrl;
 		}
 		fetchBundle(url, function(err, diff) {
-			if (err) return cb(err);
+			if (err) {
+				return cb(err);
+			}
+			if (!diff) {
+				return cb(null, bundle);
+			}
 			if (!diff.version && diff.from !== bundle.version) {
 				throw new Error("Received diff since version " + diff.from + ", but requested diff since version " + bundle.version);
 			}
