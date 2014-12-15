@@ -13,6 +13,6 @@ Loads, updates and starts the bundle.
 **parameters**
 - opts.sourceUrl - The URL where the full version of the bundle is available. This should be the latest version, the bundle will not fetch a diff after downloading the full version.
 - [opts.sourceRoot] - The root path of the sources. This will be used to create the `sourceURL` url, but is not used to actually fetch scripts. Defaults to `window.location.href`.
-- [opts.diffUrl] - A URL where diffs can be fetched from. The url must contain '%v', which will be replaced with the version of the cached bundle. If this URL is not provided the full bundle will be downloaded on every load. This URL should return a valid browserify-json-bundle-diff, such as those created by the [browserify-json-bundle-diff](https://github.com/Magnetme/browserify-json-bundle-diff) project.
+- [opts.diffUrl] - A URL where diffs can be fetched from. The url must contain '%v', which will be replaced with the version of the cached bundle. If this URL is not provided the full bundle will be downloaded on every load. This URL should return a valid browserify-json-bundle-diff, such as those created by the [browserify-json-bundle-diff](https://github.com/Magnetme/browserify-json-bundle-diff) project, or an empty response when there is no newer version.
 - [opts.storage] - An object that implements the DOM Storage interface. This will be used to cache the bundles and defaults to `window.localStorage`.
 - [opts.storageKey] - The key that will be used for caching the bundle. Defaults to `__bundle`.
