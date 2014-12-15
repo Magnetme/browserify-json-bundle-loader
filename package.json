@@ -1,6 +1,6 @@
 {
   "name": "browserify-json-bundle-loader",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Module loader for browserify-json-bundles and diffs.",
   "main": "bundleLoader.js",
   "repository": {
